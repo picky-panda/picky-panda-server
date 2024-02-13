@@ -5,6 +5,7 @@ import io.picky.panda.common.dto.ApiResponse;
 import io.picky.panda.exception.SuccessCode;
 import io.picky.panda.restaurant.application.RestaurantService;
 import io.picky.panda.restaurant.ui.dto.RestaurantRequest;
+import io.picky.panda.restaurant.ui.dto.RestaurantResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,20 @@ public class RestaurantController {
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success(
                         SuccessCode.SAVE_RESTAURANT_SUCCESS
+                ));
+    }
+
+    @GetMapping("/{restaurantId}")
+    public ResponseEntity<ApiResponse<RestaurantResponse>> getRestaurant(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long restaurantId
+    ) {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(
+                        SuccessCode.GET_RESTAURANT_SUCCESS,
+                        restaurantService.getRestaurant(user.getId(), restaurantId)
                 ));
     }
 }
