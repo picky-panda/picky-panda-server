@@ -6,9 +6,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "googleAuthClient", url = "https://www.googleapis.com")
-public interface GoogleAuthClient {
+@FeignClient(name = "googleUserClient", url = "https://www.googleapis.com")
+public interface GoogleUserClient {
 
-    @GetMapping("/oauth2/v3/userinfo")
+    @GetMapping("/oauth2/v1/userinfo")
     GoogleProfileResponse getProfile(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken);
 }

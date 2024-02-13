@@ -1,5 +1,6 @@
 package io.picky.panda.auth.ui;
 
+import io.picky.panda.auth.application.AuthService;
 import io.picky.panda.auth.ui.dto.GoogleLoginRequest;
 import io.picky.panda.auth.ui.dto.LoginResponse;
 import io.picky.panda.common.dto.ApiResponse;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
+    private final AuthService authService;
+
     @PostMapping("/google/login")
     public ResponseEntity<ApiResponse<LoginResponse>> googleLogin(@RequestBody @Valid final GoogleLoginRequest request) {
 
@@ -25,7 +28,7 @@ public class AuthController {
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success(
                         SuccessCode.GOOGLE_LOGIN_SUCCESS,
-                        LoginResponse.builder().build()
+                        authService.googleLogin(request.accessToken())
                 ));
     }
 }

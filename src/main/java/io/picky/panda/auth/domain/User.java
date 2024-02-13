@@ -3,6 +3,7 @@ package io.picky.panda.auth.domain;
 import io.picky.panda.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -25,6 +26,9 @@ public class User extends BaseEntity implements UserDetails {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    private String socialId;
+
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column
@@ -32,6 +36,14 @@ public class User extends BaseEntity implements UserDetails {
 
     @Column(nullable = false)
     private String roles;
+
+    @Builder
+    public User(String socialId, String email, String profileUrl, String roles) {
+        this.socialId = socialId;
+        this.email = email;
+        this.profileUrl = profileUrl;
+        this.roles = roles;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
