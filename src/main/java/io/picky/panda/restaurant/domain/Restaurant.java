@@ -16,6 +16,9 @@ public class Restaurant extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
+    private String image;
+
     @Column(nullable = false)
     private String placeName;
 
@@ -36,7 +39,8 @@ public class Restaurant extends BaseEntity {
     private String options;
 
     @Builder
-    public Restaurant(String placeName, String address, Double latitude, Double longitude, RestaurantCategory category, String options) {
+    public Restaurant(String image, String placeName, String address, Double latitude, Double longitude, RestaurantCategory category, String options) {
+        this.image = image;
         this.placeName = placeName;
         this.address = address;
         this.latitude = latitude;

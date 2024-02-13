@@ -5,10 +5,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
 public class RestaurantDescription {
 
     @Id
@@ -20,6 +23,14 @@ public class RestaurantDescription {
 
     @Column(nullable = false)
     private String description;
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private Integer isAgreed;
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private Integer isDisagreed;
 
     @Builder
     public RestaurantDescription(Long restaurantId, String description) {

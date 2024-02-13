@@ -2,6 +2,7 @@ package io.picky.panda.exception;
 
 import feign.FeignException;
 import io.picky.panda.common.dto.ApiResponse;
+import io.picky.panda.exception.model.PickyPandaException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +36,16 @@ public class ControllerExceptionAdvise {
                 .body(ApiResponse.error(
                         ErrorCode.INVALID_EXTERNAL_REQUEST_DATA
                 ));
+    }
+
+    /**
+     * picky panda custom Error
+     */
+    @ExceptionHandler(PickyPandaException.class)
+    protected ResponseEntity<ApiResponse<Void>> handlePickyPandaException(final PickyPandaException exception) {
+        return new ResponseEntity<>(
+                ApiResponse.error(exception.getErrorCode()),
+                exception.getErrorCode().getCode()
+        );
     }
 }
