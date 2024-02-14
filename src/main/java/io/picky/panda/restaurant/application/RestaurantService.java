@@ -3,9 +3,11 @@ package io.picky.panda.restaurant.application;
 import io.picky.panda.auth.application.UserServiceUtils;
 import io.picky.panda.auth.infrastructure.UserRepository;
 import io.picky.panda.exception.ErrorCode;
+import io.picky.panda.exception.model.ConflictException;
 import io.picky.panda.exception.model.NotFoundException;
 import io.picky.panda.restaurant.domain.Restaurant;
 import io.picky.panda.restaurant.domain.RestaurantDescription;
+import io.picky.panda.restaurant.domain.SavedRestaurant;
 import io.picky.panda.restaurant.infrastructure.RestaurantDescriptionRepository;
 import io.picky.panda.restaurant.infrastructure.RestaurantRepository;
 import io.picky.panda.restaurant.infrastructure.SavedRestaurantRepository;
@@ -77,5 +79,34 @@ public class RestaurantService {
                 .longitude(restaurant.getLongitude())
                 .descriptions(descriptions)
                 .build();
+    }
+
+    @Transactional
+    public void bookmarkRestaurant(Long userId, Long restaurantId, String status) {
+
+        UserServiceUtils.existsUserById(userRepository, userId);
+        RestaurantServiceUtils.isExistsRestaurant(restaurantRepository, restaurantId);
+
+        if (status.equals("SAVE")) {
+            if (savedRestaurantRepository.existsByUserIdAndRestaurantId(userId, restaurantId)) {
+                throw new ConflictException(ErrorCode.ALREADY_BOOKMARK_RESTAURANT);
+            }
+
+            savedRestaurantRepository.save(SavedRestaurant.builder()
+                    .userId(userId)
+                    .restaurantId(restaurantId)
+                    .build()
+            );
+        }
+
+        if (status.equals("UNSAVE")) {
+            if (!savedRestaurantRepository.existsByUserIdAndRestaurantId(userId, restaurantId)) {
+                throw new NotFoundException(ErrorCode.UNSAVED_RESTAURANT);
+            }
+
+            SavedRestaurant savedRestaurant = savedRestaurantRepository.findByUserIdAndRestaurantId(userId, restaurantId)
+                    .orElseThrow(() -> new NotFoundException(ErrorCode.UNSAVED_RESTAURANT));
+            savedRestaurantRepository.delete(savedRestaurant);
+        }
     }
 }

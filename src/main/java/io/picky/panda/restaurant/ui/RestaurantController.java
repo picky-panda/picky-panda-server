@@ -6,6 +6,7 @@ import io.picky.panda.exception.SuccessCode;
 import io.picky.panda.restaurant.application.RestaurantService;
 import io.picky.panda.restaurant.ui.dto.RestaurantRequest;
 import io.picky.panda.restaurant.ui.dto.RestaurantResponse;
+import io.picky.panda.restaurant.ui.dto.SaveRestaurantRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,21 @@ public class RestaurantController {
                 .body(ApiResponse.success(
                         SuccessCode.GET_RESTAURANT_SUCCESS,
                         restaurantService.getRestaurant(user.getId(), restaurantId)
+                ));
+    }
+
+    @PostMapping("/save/{restaurantId}")
+    public ResponseEntity<ApiResponse<Void>> saveRestaurant(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long restaurantId,
+            @RequestBody @Valid final SaveRestaurantRequest request
+    ) {
+
+        restaurantService.bookmarkRestaurant(user.getId(), restaurantId, request.status());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.success(
+                        SuccessCode.BOOKMARK_RESTAURANT_SUCCESS
                 ));
     }
 }

@@ -14,6 +14,7 @@ public enum SuccessCode {
     // Restaurant
     SAVE_RESTAURANT_SUCCESS(HttpStatus.CREATED, "가게 저장에 성공했습니다."),
     GET_RESTAURANT_SUCCESS(HttpStatus.OK, "가게 조회에 성공했습니다."),
+    BOOKMARK_RESTAURANT_SUCCESS(HttpStatus.OK, "가게 저장에 성공했습니다."),
     ;
 
     private final HttpStatus code;
