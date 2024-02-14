@@ -16,6 +16,11 @@ public enum SuccessCode {
     GET_RESTAURANT_SUCCESS(HttpStatus.OK, "가게 조회에 성공했습니다."),
     BOOKMARK_RESTAURANT_SUCCESS(HttpStatus.OK, "가게 저장에 성공했습니다."),
     AGREE_DESCRIPTION_SUCCESS(HttpStatus.OK, "가게 설명 동의에 성공했습니다."),
+
+    // review
+    SAVE_REVIEW_SUCCESS(HttpStatus.CREATED, "리뷰 등록에 성공했습니다."),
+    GET_ALL_REVIEW_SUCCESS(HttpStatus.OK, "리뷰 조회에 성공했습니다."),
+    DELETE_REVIEW_SUCCESS(HttpStatus.OK, "리뷰 삭제에 성공했습니다."),
     ;
 
     private final HttpStatus code;
