@@ -4,6 +4,7 @@ import io.picky.panda.auth.domain.User;
 import io.picky.panda.common.dto.ApiResponse;
 import io.picky.panda.exception.SuccessCode;
 import io.picky.panda.restaurant.application.RestaurantService;
+import io.picky.panda.restaurant.ui.dto.AgreeDescriptionRequest;
 import io.picky.panda.restaurant.ui.dto.RestaurantRequest;
 import io.picky.panda.restaurant.ui.dto.RestaurantResponse;
 import io.picky.panda.restaurant.ui.dto.SaveRestaurantRequest;
@@ -63,6 +64,21 @@ public class RestaurantController {
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success(
                         SuccessCode.BOOKMARK_RESTAURANT_SUCCESS
+                ));
+    }
+
+    @PostMapping("/{descriptionId}")
+    public ResponseEntity<ApiResponse<Void>> agreeDescription(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long descriptionId,
+            @RequestBody @Valid final AgreeDescriptionRequest request
+    ) {
+
+        restaurantService.agreeDescription(user.getId(), descriptionId, request);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.success(
+                        SuccessCode.AGREE_DESCRIPTION_SUCCESS
                 ));
     }
 }

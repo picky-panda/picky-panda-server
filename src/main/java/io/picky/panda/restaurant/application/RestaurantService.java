@@ -5,12 +5,9 @@ import io.picky.panda.auth.infrastructure.UserRepository;
 import io.picky.panda.exception.ErrorCode;
 import io.picky.panda.exception.model.ConflictException;
 import io.picky.panda.exception.model.NotFoundException;
-import io.picky.panda.restaurant.domain.Restaurant;
-import io.picky.panda.restaurant.domain.RestaurantDescription;
-import io.picky.panda.restaurant.domain.SavedRestaurant;
-import io.picky.panda.restaurant.infrastructure.RestaurantDescriptionRepository;
-import io.picky.panda.restaurant.infrastructure.RestaurantRepository;
-import io.picky.panda.restaurant.infrastructure.SavedRestaurantRepository;
+import io.picky.panda.restaurant.domain.*;
+import io.picky.panda.restaurant.infrastructure.*;
+import io.picky.panda.restaurant.ui.dto.AgreeDescriptionRequest;
 import io.picky.panda.restaurant.ui.dto.RestaurantDescriptionResponse;
 import io.picky.panda.restaurant.ui.dto.RestaurantRequest;
 import io.picky.panda.restaurant.ui.dto.RestaurantResponse;
@@ -28,6 +25,8 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final SavedRestaurantRepository savedRestaurantRepository;
     private final RestaurantDescriptionRepository restaurantDescriptionRepository;
+    private final AgreedDescriptionRepository agreedDescriptionRepository;
+    private final DisAgreedDescriptionRepository disAgreedDescriptionRepository;
 
     @Transactional
     public void saveRestaurant(Long userId, RestaurantRequest request) {
@@ -63,6 +62,7 @@ public class RestaurantService {
 
         List<RestaurantDescriptionResponse> descriptions = restaurantDescriptionRepository.findAllByRestaurantId(restaurantId).stream().map(
                 d -> RestaurantDescriptionResponse.builder()
+                        .descriptionId(d.getId())
                         .description(d.getDescription())
                         .isAgreed(d.getIsAgreed())
                         .isDisagreed(d.getIsDisagreed())
@@ -107,6 +107,62 @@ public class RestaurantService {
             SavedRestaurant savedRestaurant = savedRestaurantRepository.findByUserIdAndRestaurantId(userId, restaurantId)
                     .orElseThrow(() -> new NotFoundException(ErrorCode.UNSAVED_RESTAURANT));
             savedRestaurantRepository.delete(savedRestaurant);
+        }
+    }
+
+    @Transactional
+    public void agreeDescription(Long userId, Long descriptionId, AgreeDescriptionRequest request) {
+
+        UserServiceUtils.existsUserById(userRepository, userId);
+        RestaurantDescription restaurantDescription = restaurantDescriptionRepository.findById(descriptionId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.UNREGISTERED_DESCRIPTION));
+
+        if (request.status().equals("AGREE")) {
+            if (request.isApply()) {
+                if (agreedDescriptionRepository.existsByUserIdAndDescriptionId(userId, descriptionId)) {
+                    throw new ConflictException(ErrorCode.ALREADY_AGREE_DESCRIPTION);
+                }
+
+                agreedDescriptionRepository.save(AgreedDescription.builder()
+                        .userId(userId)
+                        .descriptionId(descriptionId)
+                        .build()
+                );
+                restaurantDescription.increaseAgree();
+            } else {
+                if (!agreedDescriptionRepository.existsByUserIdAndDescriptionId(userId, descriptionId)) {
+                    throw new NotFoundException(ErrorCode.NOT_AGREE_DESCRIPTION);
+                }
+
+                AgreedDescription agreedDescription = agreedDescriptionRepository.findByUserIdAndDescriptionId(userId, descriptionId)
+                        .orElseThrow(() -> new NotFoundException(ErrorCode.UNREGISTERED_DESCRIPTION));
+                agreedDescriptionRepository.delete(agreedDescription);
+                restaurantDescription.decreaseAgree();
+            }
+        }
+
+        if (request.status().equals("DISAGREE")) {
+            if (request.isApply()) {
+                if (disAgreedDescriptionRepository.existsByUserIdAndDescriptionId(userId, descriptionId)) {
+                    throw new ConflictException(ErrorCode.ALREADY_DISAGREE_DESCRIPTION);
+                }
+
+                disAgreedDescriptionRepository.save(DisAgreedDescription.builder()
+                        .userId(userId)
+                        .descriptionId(descriptionId)
+                        .build()
+                );
+                restaurantDescription.increaseDisAgree();
+            } else {
+                if (!disAgreedDescriptionRepository.existsByUserIdAndDescriptionId(userId, descriptionId)) {
+                    throw new NotFoundException(ErrorCode.NOT_DISAGREE_DESCRIPTION);
+                }
+
+                DisAgreedDescription disAgreedDescription = disAgreedDescriptionRepository.findByUserIdAndDescriptionId(userId, descriptionId)
+                        .orElseThrow(() -> new NotFoundException(ErrorCode.UNREGISTERED_DESCRIPTION));
+                disAgreedDescriptionRepository.delete(disAgreedDescription);
+                restaurantDescription.decreaseDisAgree();
+            }
         }
     }
 }

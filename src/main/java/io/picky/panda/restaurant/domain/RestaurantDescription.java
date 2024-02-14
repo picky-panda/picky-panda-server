@@ -37,4 +37,20 @@ public class RestaurantDescription {
         this.restaurantId = restaurantId;
         this.description = description;
     }
+
+    public void increaseAgree() {
+        this.isAgreed++;
+    }
+
+    public void decreaseAgree() {
+        this.isAgreed--;
+    }
+
+    public void increaseDisAgree() {
+        this.isDisagreed++;
+    }
+
+    public void decreaseDisAgree() {
+        this.isDisagreed--;
+    }
 }

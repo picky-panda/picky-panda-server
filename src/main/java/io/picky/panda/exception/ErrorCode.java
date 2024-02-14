@@ -25,6 +25,11 @@ public enum ErrorCode {
     UNREGISTERED_RESTAURANT(HttpStatus.NOT_FOUND, "등록되지 않은 가게입니다."),
     ALREADY_BOOKMARK_RESTAURANT(HttpStatus.CONFLICT, "이미 저장된 가게입니다."),
     UNSAVED_RESTAURANT(HttpStatus.NOT_FOUND, "저장되지 않은 가게입니다."),
+    UNREGISTERED_DESCRIPTION(HttpStatus.NOT_FOUND, "존재하지 않는 설명입니다."),
+    ALREADY_AGREE_DESCRIPTION(HttpStatus.CONFLICT, "이미 동의한 설명입니다."),
+    ALREADY_DISAGREE_DESCRIPTION(HttpStatus.CONFLICT, "이미 비동의한 설명입니다."),
+    NOT_AGREE_DESCRIPTION(HttpStatus.NOT_FOUND, "동의한적 없는 설명입니다."),
+    NOT_DISAGREE_DESCRIPTION(HttpStatus.NOT_FOUND, "비동의한적 없는 설명입니다."),
 
     // external
     INVALID_EXTERNAL_REQUEST_DATA(HttpStatus.BAD_REQUEST, "외부 API 요청에 잘못된 데이터가 전달됐습니다."),
