@@ -31,6 +31,10 @@ public enum ErrorCode {
     NOT_AGREE_DESCRIPTION(HttpStatus.NOT_FOUND, "동의한적 없는 설명입니다."),
     NOT_DISAGREE_DESCRIPTION(HttpStatus.NOT_FOUND, "비동의한적 없는 설명입니다."),
 
+    // review
+    NOT_EXISTS_REVIEW(HttpStatus.NOT_FOUND, "존재하지 않는 리뷰입니다."),
+    FORBIDDEN_REVIEW(HttpStatus.FORBIDDEN, "접근 권한이 없는 리뷰입니다."),
+
     // external
     INVALID_EXTERNAL_REQUEST_DATA(HttpStatus.BAD_REQUEST, "외부 API 요청에 잘못된 데이터가 전달됐습니다."),
     ;
