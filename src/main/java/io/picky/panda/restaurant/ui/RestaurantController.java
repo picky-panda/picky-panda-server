@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("restaurant")
@@ -91,6 +93,23 @@ public class RestaurantController {
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success(
                         SuccessCode.SAVE_DESCRIPTION_SUCCESS
+                ));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<ApiResponse<List<RestaurantMapResponse>>> getRestaurantList(
+            @AuthenticationPrincipal User user,
+            @RequestParam Long northEastX,
+            @RequestParam Long northEastY,
+            @RequestParam Long southWestX,
+            @RequestParam Long southWestY
+    ) {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(
+                        SuccessCode.GET_RESTAURANT_LIST_SUCCESS,
+                        restaurantService.getRestaurantList(user.getId(), northEastX, northEastY, southWestX, southWestY)
                 ));
     }
 }

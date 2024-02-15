@@ -21,6 +21,7 @@ public enum SuccessCode {
     GET_RESTAURANT_SUCCESS(HttpStatus.OK, "가게 조회에 성공했습니다."),
     BOOKMARK_RESTAURANT_SUCCESS(HttpStatus.OK, "가게 저장에 성공했습니다."),
     AGREE_DESCRIPTION_SUCCESS(HttpStatus.OK, "가게 설명 동의에 성공했습니다."),
+    GET_RESTAURANT_LIST_SUCCESS(HttpStatus.OK, "가게 목록 조회에 성공했습니다."),
 
     // review
     SAVE_REVIEW_SUCCESS(HttpStatus.CREATED, "리뷰 등록에 성공했습니다."),

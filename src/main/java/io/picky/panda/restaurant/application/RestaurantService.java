@@ -7,10 +7,7 @@ import io.picky.panda.exception.model.ConflictException;
 import io.picky.panda.exception.model.NotFoundException;
 import io.picky.panda.restaurant.domain.*;
 import io.picky.panda.restaurant.infrastructure.*;
-import io.picky.panda.restaurant.ui.dto.AgreeDescriptionRequest;
-import io.picky.panda.restaurant.ui.dto.RestaurantDescriptionResponse;
-import io.picky.panda.restaurant.ui.dto.RestaurantRequest;
-import io.picky.panda.restaurant.ui.dto.RestaurantResponse;
+import io.picky.panda.restaurant.ui.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,6 +76,22 @@ public class RestaurantService {
                 .longitude(restaurant.getLongitude())
                 .descriptions(descriptions)
                 .build();
+    }
+
+    @Transactional
+    public List<RestaurantMapResponse> getRestaurantList(Long userId, Long northEastX, Long northEastY, Long southWestX, Long southWestY) {
+
+        UserServiceUtils.existsUserById(userRepository, userId);
+
+        return restaurantRepository.findWithinArea(northEastX, northEastY, southWestX, southWestY).stream().map(r ->
+                RestaurantMapResponse.builder()
+                        .id(r.getId())
+                        .image(r.getImage())
+                        .placeName(r.getPlaceName())
+                        .latitude(r.getLatitude())
+                        .longitude(r.getLongitude())
+                        .build()
+        ).toList();
     }
 
     @Transactional
