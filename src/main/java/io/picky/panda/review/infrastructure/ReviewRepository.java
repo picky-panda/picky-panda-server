@@ -10,4 +10,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     // READ
     List<Review> findAllByRestaurantId(Long restaurantId);
     Boolean existsByUserIdAndRestaurantId(Long userId, Long restaurantId);
+    Integer countByUserId(Long userId);
+    List<Review> findAllByUserId(Long userId);
 }

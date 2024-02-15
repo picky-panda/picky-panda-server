@@ -9,4 +9,6 @@ public interface RestaurantDescriptionRepository extends JpaRepository<Restauran
 
     // READ
     List<RestaurantDescription> findAllByRestaurantId(Long restaurantId);
+    Integer countByUserId(Long userId);
+    List<RestaurantDescription> findAllByUserId(Long userId);
 }

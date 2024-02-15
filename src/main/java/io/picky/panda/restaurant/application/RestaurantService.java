@@ -46,6 +46,7 @@ public class RestaurantService {
 
         if (request.description() != null) {
             restaurantDescriptionRepository.save(RestaurantDescription.builder()
+                    .userId(userId)
                     .restaurantId(restaurant.getId())
                     .description(request.description())
                     .build()
@@ -68,7 +69,6 @@ public class RestaurantService {
                         .isDisagreed(d.getIsDisagreed())
                         .build()
         ).toList();
-
 
 
         return RestaurantResponse.builder()

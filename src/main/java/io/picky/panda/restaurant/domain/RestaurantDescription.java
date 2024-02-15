@@ -19,6 +19,9 @@ public class RestaurantDescription {
     private Long id;
 
     @Column(nullable = false)
+    private Long userId;
+
+    @Column(nullable = false)
     private Long restaurantId;
 
     @Column(nullable = false)
@@ -33,7 +36,8 @@ public class RestaurantDescription {
     private Integer isDisagreed;
 
     @Builder
-    public RestaurantDescription(Long restaurantId, String description) {
+    public RestaurantDescription(Long userId, Long restaurantId, String description) {
+        this.userId = userId;
         this.restaurantId = restaurantId;
         this.description = description;
     }
