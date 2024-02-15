@@ -4,10 +4,7 @@ import io.picky.panda.auth.domain.User;
 import io.picky.panda.common.dto.ApiResponse;
 import io.picky.panda.exception.SuccessCode;
 import io.picky.panda.restaurant.application.RestaurantService;
-import io.picky.panda.restaurant.ui.dto.AgreeDescriptionRequest;
-import io.picky.panda.restaurant.ui.dto.RestaurantRequest;
-import io.picky.panda.restaurant.ui.dto.RestaurantResponse;
-import io.picky.panda.restaurant.ui.dto.SaveRestaurantRequest;
+import io.picky.panda.restaurant.ui.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -79,6 +76,21 @@ public class RestaurantController {
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success(
                         SuccessCode.AGREE_DESCRIPTION_SUCCESS
+                ));
+    }
+
+    @PostMapping("/description/{restaurantId}")
+    public ResponseEntity<ApiResponse<Void>> registerDescription(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long restaurantId,
+            @RequestBody @Valid final DescriptionRequest request
+            ) {
+
+        restaurantService.saveDescription(user.getId(), restaurantId, request.description());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.success(
+                        SuccessCode.SAVE_DESCRIPTION_SUCCESS
                 ));
     }
 }

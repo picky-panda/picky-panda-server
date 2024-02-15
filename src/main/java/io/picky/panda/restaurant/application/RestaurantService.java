@@ -165,4 +165,18 @@ public class RestaurantService {
             }
         }
     }
+
+    @Transactional
+    public void saveDescription(Long userId, Long restaurantId, String description) {
+
+        UserServiceUtils.existsUserById(userRepository, userId);
+        RestaurantServiceUtils.isExistsRestaurant(restaurantRepository, restaurantId);
+
+        restaurantDescriptionRepository.save(RestaurantDescription.builder()
+                .userId(userId)
+                .restaurantId(restaurantId)
+                .description(description)
+                .build()
+        );
+    }
 }
