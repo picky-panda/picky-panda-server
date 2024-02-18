@@ -5,10 +5,11 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "googleUserClient", url = "https://www.googleapis.com")
+@FeignClient(name = "googleUserClient", url = "https://oauth2.googleapis.com")
 public interface GoogleUserClient {
 
-    @GetMapping("/oauth2/v1/userinfo")
-    GoogleProfileResponse getProfile(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken);
+    @GetMapping("/tokeninfo")
+    GoogleProfileResponse getProfile(@RequestParam(name = "id_token") String idToken);
 }

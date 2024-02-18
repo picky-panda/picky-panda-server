@@ -13,9 +13,7 @@ public class GoogleClientService {
 
     private final GoogleUserClient googleUserClient;
 
-    public GoogleProfileResponse getUserInfo(String accessToken) {
-        String decodedAccessToken = URLDecoder.decode(accessToken, StandardCharsets.UTF_8);
-        System.out.println(decodedAccessToken);
-        return googleUserClient.getProfile("Bearer " + decodedAccessToken);
+    public GoogleProfileResponse getUserInfo(String idToken) {
+        return googleUserClient.getProfile(idToken);
     }
 }

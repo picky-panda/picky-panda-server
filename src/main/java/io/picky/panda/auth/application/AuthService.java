@@ -24,12 +24,12 @@ public class AuthService {
     private final JwtProvider jwtProvider;
 
     @Transactional
-    public LoginResponse googleLogin(String accessToken) {
-        GoogleProfileResponse profile = googleClientService.getUserInfo(accessToken);
+    public LoginResponse googleLogin(String idToken) {
+        GoogleProfileResponse profile = googleClientService.getUserInfo(idToken);
 
         User user = userRepository.findByEmail(profile.email())
                 .orElseGet(() -> userRepository.save(User.builder()
-                        .socialId(profile.id())
+                        .socialId(profile.sub())
                         .email(profile.email())
                         .profileUrl(profile.picture())
                         .roles(Role.USER.name())

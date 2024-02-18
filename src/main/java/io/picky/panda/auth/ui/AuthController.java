@@ -28,7 +28,7 @@ public class AuthController {
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success(
                         SuccessCode.GOOGLE_LOGIN_SUCCESS,
-                        authService.googleLogin(request.accessToken())
+                        authService.googleLogin(request.idToken())
                 ));
     }
 }

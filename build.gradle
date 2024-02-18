@@ -55,6 +55,8 @@ dependencies {
 
 	// external
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	implementation 'com.google.api-client:google-api-client:1.34.1'
 }
 
 dependencyManagement {
